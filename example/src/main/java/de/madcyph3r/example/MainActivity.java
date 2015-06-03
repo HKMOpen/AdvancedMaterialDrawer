@@ -43,8 +43,11 @@ public class MainActivity extends MaterialNavigationDrawer {
         this.newSection("Drawer Types", new DrawerTypesFragment(), false, menu).setSectionColor(Color.parseColor("#D35400"));
         this.newSection("Header Types", new HeaderTypesFragment(), false, menu).setSectionColor(Color.parseColor("#01AEA1"));
         this.newSection("Head Item Types", new HeadItemTypesFragment(), false, menu).setSectionColor(Color.parseColor("#9B59B6"));
+
         this.newSection("Menu", new MenuFragment(), false, menu).setSectionColor(Color.parseColor("#3498DB"));
+
         this.newSection("Back Pattern", new BackPatternFragment(), false, menu).setSectionColor(Color.parseColor("#3CD876"));
+        this.newDevisor(menu);
         this.newSection("Listener", new ListenerFragment(), false, menu).setSectionColor(Color.parseColor("#9D8C84"));
         this.newSection("Functionally", new FunctionallyFragment(), false, menu).setSectionColor(Color.parseColor("#F1C40F"));
 

@@ -1072,15 +1072,15 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
      * the actual thing to add the devisor
      */
     private void addDevisor() {
-
-
-        LinearLayout.LayoutParams separator = new LinearLayout.LayoutParams(HorizontalScrollView.LayoutParams.MATCH_PARENT, dividerStrokeThickness);
+        final LinearLayout.LayoutParams separator = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 10);
         //border set
         View bar = new View(this);
-        bar.setBackgroundColor(borderColor);
+        //  bar.setBackgroundColor(borderColor);
+       // bar.setBackgroundColor(R.color.dividerclolr);
+        bar.setBackgroundResource(R.drawable.white_gradient);
         bar.setLayoutParams(separator);
-
         items.addView(bar);
+        //  items.requestLayout();
     }
 
     private void addDevisorBottom() {
