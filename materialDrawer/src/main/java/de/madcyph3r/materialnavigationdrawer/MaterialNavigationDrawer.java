@@ -30,7 +30,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -132,7 +131,6 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
     private int primaryColor;
     private int primaryDarkColor;
     private int dividerStrokeThickness;
-    private int drawerWidth;
     private boolean autoDarkStatusbar;
     private boolean multiPaneSupport;
     private boolean drawerTouchLocked;
@@ -143,12 +141,13 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
     private int backPattern;
     private int headerDPHeight;
     private int drawerDPWidth;
+    private int drawerWidth;
     private int drawerHeaderType;
     private boolean uniqueToolbarColor;
     private boolean finishActivityOnNewIntent;
     private DrawerLayout.DrawerListener drawerStateListener;
     private int drawerColor;
-    private int dividerColor;
+    private Drawable dividerColor;
     private int titleColor;
     private int subTitleColor;
     private int drawerActionBarStyle;
@@ -206,7 +205,6 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-        settingToolbar(toolbar);
         // INIT ACTION BAR
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -215,7 +213,7 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
         // DEVELOPER CALL TO INIT
         init(savedInstanceState);
         // drawerViewGroup init
-        initDrawer();
+        initDrawerPrivate();
         // load here header and menu
         initHeaderAndMenu(savedInstanceState);
         //afterInit();
@@ -249,10 +247,9 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
         theme.resolveAttribute(R.attr.drawerColor, typedValue, true);
         drawerColor = typedValue.data;
 
-        theme.resolveAttribute(R.attr.dividerColor, typedValue, true);
+       /* theme.resolveAttribute(R.attr.dividerColor, typedValue, true);
         dividerColor = typedValue.data;
-
-
+*/
         theme.resolveAttribute(R.attr.drawerWidth, typedValue, true);
         drawerWidth = (int) typedValue.getDimension(dm);
         //TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
@@ -277,6 +274,12 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
 
         theme.resolveAttribute(R.attr.titleColor, typedValue, true);
         theme.resolveAttribute(R.attr.accountStyle, typedValue, true);
+
+        // Values of the NavigationDrawer
+        TypedArray valuesNavigationDrawer = theme.obtainStyledAttributes(typedValue.resourceId, R.styleable.MaterialNavigationDrawer);
+        dividerColor = valuesNavigationDrawer.getDrawable(R.styleable.MaterialNavigationDrawer_dividerColor);
+
+        // Values of the Account
         TypedArray values = theme.obtainStyledAttributes(typedValue.resourceId, R.styleable.MaterialAccount);
         titleColor = values.getColor(R.styleable.MaterialAccount_titleColor, 0x00FFFFFF);
         subTitleColor = values.getColor(R.styleable.MaterialAccount_subTitleColor, 0x00FFFFFF);
@@ -291,6 +294,8 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
         //actionbar style customization
         theme.resolveAttribute(R.attr.drawerActionBarStyle, typedValue, true);
         drawerActionBarStyle = typedValue.data;
+
+
     }
 
 
@@ -355,6 +360,7 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
         bottomSections = (LinearLayout) this.findViewById(R.id.bottom_sections);
     }
 
+
     private void initKitKatDependencies(Resources.Theme theme) {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
             TypedArray windowTraslucentAttribute = theme.obtainStyledAttributes(new int[]{android.R.attr.windowTranslucentStatus});
@@ -377,7 +383,7 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
         }
     }
 
-    private void initDrawer() {
+    private void initDrawerPrivate() {
 
         DrawerLayout.LayoutParams drawerParams = (android.support.v4.widget.DrawerLayout.LayoutParams) drawerViewGroup.getLayoutParams();
         Resources r = getResources();
@@ -392,68 +398,7 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
 
         drawerViewGroup.setLayoutParams(drawerParams);
 
-        if (deviceSupportMultiPane()) {
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, drawerViewGroup);
-            DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.setMargins((int) (320 * displayDensity), 0, 0, 0);
-            contentViewGroup.setLayoutParams(params);
-            drawerLayout.setScrimColor(Color.TRANSPARENT);
-            drawerLayout.openDrawer(drawerViewGroup);
-            drawerLayout.setMultipaneSupport(true);
-            // drawerLayout.setDrawerViewOffset
-            //drawerLayout.requestDisallowInterceptTouchEvent(true);
-        } else {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-
-            // don't use the constructor with toolbar, or onOptionsItemSelected() method will not be called
-            actionBarToggle = new ActionBarDrawerToggle(this, drawerLayout/*, toolbar*/, R.string.nothing, R.string.nothing) {
-
-                public void onDrawerClosed(View view) {
-                    invalidateOptionsMenu();
-
-                    drawerTouchLocked = false;
-
-                    if (drawerStateListener != null)
-                        drawerStateListener.onDrawerClosed(view);
-                }
-
-                public void onDrawerOpened(View drawerView) {
-                    invalidateOptionsMenu();
-
-                    if (drawerStateListener != null)
-                        drawerStateListener.onDrawerOpened(drawerView);
-                }
-
-                /**
-                 * this is where the custom drawer width goes
-                 * @param drawerView   the view instance
-                 * @param slideOffset  the offset movement from 0 to 1 transforming from 0 to 100%
-                 */
-                @Override
-                public void onDrawerSlide(View drawerView, float slideOffset) {
-                    // if user wants the sliding arrow it compare
-                    if (slidingDrawerEffect) {
-                        if (drawerStateListener != null) {
-                            //     drawerStateListener.onDrawerSlide(drawerView, slideOffset);
-                        }
-                    } else {
-                        super.onDrawerSlide(drawerView, 0);
-                    }
-                }
-
-                @Override
-                public void onDrawerStateChanged(int newState) {
-                    super.onDrawerStateChanged(newState);
-
-                    if (drawerStateListener != null)
-                        drawerStateListener.onDrawerStateChanged(newState);
-                }
-            };
-
-            drawerLayout.setDrawerListener(actionBarToggle);
-            drawerLayout.setMultipaneSupport(false);
-        }
+        initDrawer();
 
         ViewTreeObserver vto = drawerViewGroup.getViewTreeObserver();
 
@@ -516,6 +461,65 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
                 }
             }
         });
+    }
+
+    public void initDrawer() {
+        if (deviceSupportMultiPane()) {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, drawerViewGroup);
+            DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.setMargins((int) (320 * displayDensity), 0, 0, 0);
+            contentViewGroup.setLayoutParams(params);
+            drawerLayout.setScrimColor(Color.TRANSPARENT);
+            drawerLayout.openDrawer(drawerViewGroup);
+            drawerLayout.setMultipaneSupport(true);
+            //drawerLayout.requestDisallowInterceptTouchEvent(true);
+        } else {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+
+            // don't use the constructor with toolbar, or onOptionsItemSelected() method will not be called
+            actionBarToggle = new ActionBarDrawerToggle(this, drawerLayout/*, toolbar*/, R.string.nothing, R.string.nothing) {
+
+                public void onDrawerClosed(View view) {
+                    invalidateOptionsMenu();
+
+                    drawerTouchLocked = false;
+
+                    if (drawerStateListener != null)
+                        drawerStateListener.onDrawerClosed(view);
+                }
+
+                public void onDrawerOpened(View drawerView) {
+                    invalidateOptionsMenu();
+
+                    if (drawerStateListener != null)
+                        drawerStateListener.onDrawerOpened(drawerView);
+                }
+
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+                    // if user wants the sliding arrow it compare
+                    if (slidingDrawerEffect)
+                        super.onDrawerSlide(drawerView, slideOffset);
+                    else
+                        super.onDrawerSlide(drawerView, 0);
+
+                    if (drawerStateListener != null)
+                        drawerStateListener.onDrawerSlide(drawerView, slideOffset);
+                }
+
+                @Override
+                public void onDrawerStateChanged(int newState) {
+                    super.onDrawerStateChanged(newState);
+
+                    if (drawerStateListener != null)
+                        drawerStateListener.onDrawerStateChanged(newState);
+                }
+            };
+
+            drawerLayout.setDrawerListener(actionBarToggle);
+            drawerLayout.setMultipaneSupport(false);
+        }
     }
 
     private void initHeaderAndMenu(Bundle savedInstanceState) {
@@ -1125,7 +1129,10 @@ public abstract class MaterialNavigationDrawer<Fragment, customTextView extends 
         LinearLayout.LayoutParams separator = new LinearLayout.LayoutParams(HorizontalScrollView.LayoutParams.MATCH_PARENT, dividerStrokeThickness);
         //border set
         View bar = new View(this);
-        bar.setBackgroundResource(R.drawable.pressfill);
+        // todo get from theme
+
+        bar.setBackground(dividerColor);
+        //bar.setBackgroundResource(dividerColor);
         bar.setLayoutParams(separator);
         items.addView(bar);
     }
