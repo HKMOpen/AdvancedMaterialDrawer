@@ -83,8 +83,9 @@
                 android:layout_toStartOf="@+id/second_head_item_photo"
                 android:layout_marginRight="16dp" />
 
+
             <LinearLayout
-                android:id="@+id/items"
+                android:id="@+id/sections"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -94,6 +95,7 @@
                 android:orientation="vertical">
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/background_gradient"

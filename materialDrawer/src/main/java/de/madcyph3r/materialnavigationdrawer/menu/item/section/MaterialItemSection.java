@@ -1,11 +1,8 @@
-package de.madcyph3r.materialnavigationdrawer.menu.item;
+package de.madcyph3r.materialnavigationdrawer.menu.item.section;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
@@ -17,37 +14,31 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
+import de.madcyph3r.materialnavigationdrawer.MaterialNavigationDrawer;
+import de.madcyph3r.materialnavigationdrawer.R;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialSectionChangeListener;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialSectionOnClickListener;
-import de.madcyph3r.materialnavigationdrawer.R;
+import de.madcyph3r.materialnavigationdrawer.menu.item.MaterialMenuItem;
 import de.madcyph3r.materialnavigationdrawer.ripple.MaterialPlain;
 import de.madcyph3r.materialnavigationdrawer.ripple.MaterialRippleLayout;
 import de.madcyph3r.materialnavigationdrawer.ripple.MaterialRippleLayoutNineOld;
 
-public class MaterialSection<Fragment, customTextView extends TextView> implements View.OnTouchListener, View.OnClickListener {
+public abstract class MaterialItemSection<CustomTextView extends TextView> extends MaterialMenuItem implements View.OnTouchListener, View.OnClickListener {
 
-    public static final int TARGET_FRAGMENT = 0;
-    public static final int TARGET_ACTIVITY = 1;
-    public static final int TARGET_CLICK = 2;
 
+    private MaterialNavigationDrawer drawer;
     private View view;
-    private customTextView text;
-    private customTextView notifications;
-    private ImageView icon;
-    private MaterialSectionOnClickListener listener;
-    private MaterialSectionChangeListener changeListener;
+    private CustomTextView text;
+    private CustomTextView notifications;
+    private ImageView iconView;
+    protected MaterialSectionOnClickListener sectionListener;
 
     private boolean isSelected;
-    private int targetType;
     private int sectionColor;
     private boolean fillIconColor;
 
-    private boolean bottom;
-
     private boolean hasSectionColor;
     private boolean hasColorDark;
-    //private int colorPressed;
     private int colorUnpressed;
     private int colorSelected;
     private int colorOnPressHighlight;
@@ -58,21 +49,19 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
 
     private int numberNotifications;
 
-    private String title;
-    private String fragmentTitle;
+    protected String title;
 
-    private Fragment targetFragment;
-    private Intent targetIntent;
-
-    private boolean hasIcon = false, sectiondivided;
+    private boolean hasIcon = false;
+    private boolean sectionDivided = false;
 
 
-    public MaterialSection(Context ctx, boolean hasIcon, int target, boolean bottom, MaterialSectionChangeListener changeListener, boolean fullBanner) {
+    /*public MaterialItemSection(Context ctx, boolean hasIcon, int target, boolean bottom, MaterialSectionChangeListener changeListener, boolean fullBanner) {
         init(ctx, hasIcon, target, bottom, changeListener, fullBanner);
-    }
+    }*/
 
     private int getItemLayout(TypedArray values, int defaultResId) {
         int resId = values.getResourceId(R.styleable.MaterialSection_section_item_layout, -1);
+
         if (resId == -1) {
             Log.d("not", "got -1");
             return defaultResId;
@@ -83,27 +72,60 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
     }
 
     @SuppressLint("WrongViewCast")
-    private void init(Context ctx, boolean hasIcon, int target, boolean bottom, MaterialSectionChangeListener changeListener, boolean fullWidthIcon) {
+    protected void init(MaterialNavigationDrawer drawer, Drawable iconDrawable /*resIconID/*, boolean hasIcon, MaterialSectionChangeListener sectionChangeListener*/, boolean fullWidthIcon) {
+        this.drawer = drawer;
 
-        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        int currentApiVersion = Build.VERSION.SDK_INT;
         /**
          * theme location
          */
-        Resources.Theme theme = ctx.getTheme();
+        Resources.Theme theme = drawer.getTheme();
         TypedValue typedValue = new TypedValue();
         theme.resolveAttribute(R.attr.sectionStyle, typedValue, true);
         TypedArray values = theme.obtainStyledAttributes(typedValue.resourceId, R.styleable.MaterialSection);
 
-        /**
-         * the title from the fragments
-         */
-        fragmentTitle = null;
+        if(iconDrawable == null) {
+            hasIcon = false;
+        } else {
 
-        this.changeListener = changeListener;
-        this.bottom = bottom;
-        this.hasIcon = hasIcon;
+            hasIcon = true;
+        }
 
 
+        // inflate the right layout
+        if (!hasIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section), null);
+        } else if(!hasIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section_nine_old), null);
+        } else if(hasIcon && !fullWidthIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section_icon), null);
+            iconView = (ImageView) view.findViewById(R.id.section_icon);
+            setIconView(iconDrawable);
+        } else if(hasIcon && !fullWidthIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section_icon_nine_old), null);
+            iconView = (ImageView) view.findViewById(R.id.section_icon);
+            setIconView(iconDrawable);
+        } else if(hasIcon && fullWidthIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            view = LayoutInflater.from(drawer).inflate(R.layout.layout_material_section_full_image, null);
+            iconView = (ImageView) view.findViewById(R.id.section_icon);
+            setIconView(iconDrawable);
+        } else if(hasIcon && fullWidthIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            view = LayoutInflater.from(drawer).inflate(R.layout.layout_material_section_full_image_nine_old, null);
+            iconView = (ImageView) view.findViewById(R.id.section_icon);
+            setIconView(iconDrawable);
+        }
+
+        notifications = (CustomTextView) view.findViewById(R.id.section_notification);
+        text = (CustomTextView) view.findViewById(R.id.section_text);
+
+        // hide text on icon banner
+        if(hasIcon && fullWidthIcon) {
+            text.setVisibility(View.GONE);
+            notifications.setVisibility(View.GONE);
+        }
+
+
+        /*
         if (!hasIcon) {
             if (currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 view = LayoutInflater.from(ctx).inflate(getItemLayout(values, R.layout.layout_material_section), null);
@@ -118,36 +140,39 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
                     view = LayoutInflater.from(ctx).inflate(getItemLayout(values, R.layout.layout_material_section_icon_nine_old), null);
                 }
             } else {
-                view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section_full_image, null);
+                if (currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section_full_image, null);
+                } else {
+                    view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section_full_image_nine_old, null);
+                }
             }
-            icon = (ImageView) view.findViewById(R.id.section_icon);
-        }
+            iconView = (ImageView) view.findViewById(R.id.section_icon);
+        }*/
 
 
-        notifications = (customTextView) view.findViewById(R.id.section_notification);
-        text = (customTextView) view.findViewById(R.id.section_text);
+
 
 
         int rippleColor = values.getColor(R.styleable.MaterialSection_sectionRippleColor, 0x16000000);
 
         if (view.findViewById(R.id.section_ripple) instanceof MaterialRippleLayout) {
-            MaterialRippleLayout ilayout = (MaterialRippleLayout) view.findViewById(R.id.section_ripple);
-            ilayout.setRippleColor(rippleColor);
-            ilayout.setOnClickListener(this);
-            ilayout.setOnTouchListener(this);
+            MaterialRippleLayout rippleLayout = (MaterialRippleLayout) view.findViewById(R.id.section_ripple);
+            rippleLayout.setRippleColor(rippleColor);
+            rippleLayout.setOnClickListener(this);
+            rippleLayout.setOnTouchListener(this);
         } else if (view.findViewById(R.id.section_ripple) instanceof MaterialRippleLayoutNineOld) {
-            MaterialRippleLayoutNineOld ilayout = (MaterialRippleLayoutNineOld) view.findViewById(R.id.section_ripple);
-            ilayout.setRippleColor(rippleColor);
-            ilayout.setOnClickListener(this);
-            ilayout.setOnTouchListener(this);
+            MaterialRippleLayoutNineOld rippleLayout = (MaterialRippleLayoutNineOld) view.findViewById(R.id.section_ripple);
+            rippleLayout.setRippleColor(rippleColor);
+            rippleLayout.setOnClickListener(this);
+            rippleLayout.setOnTouchListener(this);
         } else if (view.findViewById(R.id.section_ripple) instanceof MaterialPlain) {
-            MaterialPlain ilayout = (MaterialPlain) view.findViewById(R.id.section_ripple);
-            ilayout.setOnClickListener(this);
-            ilayout.setOnTouchListener(this);
+            MaterialPlain rippleLayout = (MaterialPlain) view.findViewById(R.id.section_ripple);
+            rippleLayout.setOnClickListener(this);
+            rippleLayout.setOnTouchListener(this);
         } else if (view.findViewById(R.id.section_relative_layout) instanceof RelativeLayout) {
-            RelativeLayout ilayout = (RelativeLayout) view.findViewById(R.id.section_relative_layout);
-            ilayout.setOnClickListener(this);
-            ilayout.setOnTouchListener(this);
+            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.section_relative_layout);
+            relativeLayout.setOnClickListener(this);
+            relativeLayout.setOnTouchListener(this);
         }
 
         //colorPressed = values.getColor(R.styleable.MaterialSection_sectionBackgroundColorPressed, 0x16000000);
@@ -158,12 +183,13 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         iconColor = values.getColor(R.styleable.MaterialSection_sectionColorIcon, 0x000);
         textColor = values.getColor(R.styleable.MaterialSection_sectionColorText, 0x000);
         notificationColor = values.getColor(R.styleable.MaterialSection_sectionColorNotification, 0x000);
-        sectiondivided = values.getBoolean(R.styleable.MaterialSection_sectionDivider, false);
+        sectionDivided = values.getBoolean(R.styleable.MaterialSection_sectionDivider, false);
 
         // set text color into the view
         if (textColor != 0x000) {
             text.setTextColor(textColor);
         }
+
         if (notificationColor != 0x000) {
             notifications.setTextColor(notificationColor);
         }
@@ -171,7 +197,6 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         isSelected = false;
         hasSectionColor = false;
         hasColorDark = false;
-        targetType = target;
         numberNotifications = 0;
         fillIconColor = true;
     }
@@ -202,9 +227,9 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         return position;
     }*/
 
-    public void setOnClickListener(final MaterialSectionOnClickListener listener) {
-        this.listener = listener;
-    }
+    /*public void setOnClickListener(final MaterialSectionOnClickListener listener) {
+        this.sectionListener = listener;
+    }*/
 
     public View getView() {
         return view;
@@ -219,60 +244,38 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         this.text.setText(title);
     }
 
-    public void setIcon(Drawable drawbleicon) {
-        if (this.icon != null) {
-            this.icon.setImageDrawable(drawbleicon);
+    public void setIconView(Drawable drawbleicon) {
+        if (this.iconView != null) {
+            this.iconView.setImageDrawable(drawbleicon);
             if (fillIconColor)
-                this.icon.setColorFilter(iconColor);
-
-            this.icon.setVisibility(View.VISIBLE);
+                this.iconView.setColorFilter(iconColor);
+            this.iconView.setVisibility(View.VISIBLE);
         }
 
     }
 
-    public void setIcon(Bitmap drawbleicon) {
-        if (this.icon != null) {
-            this.icon.setImageBitmap(drawbleicon);
+    /*public void setIconView(Bitmap drawbleicon) {
+        if (this.iconView != null) {
+            this.iconView.setImageBitmap(drawbleicon);
             if (fillIconColor)
-                this.icon.setColorFilter(iconColor);
+                this.iconView.setColorFilter(iconColor);
 
-            this.icon.setVisibility(View.VISIBLE);
+            this.iconView.setVisibility(View.VISIBLE);
         }
-    }
-
-    public void setTarget(Fragment target) {
-        this.targetFragment = target;
-    }
-
-    public void setTarget(Intent intent) {
-        this.targetIntent = intent;
-    }
-
-    public int getTarget() {
-        return targetType;
-    }
-
-    public Fragment getTargetFragment() {
-        return targetFragment;
-    }
-
-    public Intent getTargetIntent() {
-        return targetIntent;
-    }
+    }*/
 
     public boolean hasSectionColorDark() {
         return hasColorDark;
     }
 
-    public MaterialSection setSectionColor(int color) {
+    public MaterialItemSection setSectionColor(int color) {
 
         sectionColor = color;
         iconColor = color;
-        if (icon != null)
-            icon.setColorFilter(sectionColor);
+        if (iconView != null)
+            iconView.setColorFilter(sectionColor);
 
         hasSectionColor = true;
-
 
         return this;
     }
@@ -281,7 +284,7 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         return colorDark;
     }
 
-    public MaterialSection setSectionColor(int color, int colorDark) {
+    public MaterialItemSection setSectionColor(int color, int colorDark) {
         setSectionColor(color);
         hasColorDark = true;
         this.colorDark = colorDark;
@@ -303,7 +306,7 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
      * @param notifications the number of notification active for this section
      * @return this section
      */
-    public MaterialSection setNotifications(int notifications) {
+    public void setNotifications(int notifications) {
         String textNotification;
 
         textNotification = String.valueOf(notifications);
@@ -318,20 +321,17 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         this.notifications.setText(textNotification);
         numberNotifications = notifications;
 
-        return this;
+       // return this;
     }
 
     public int getNotifications() {
         return numberNotifications;
     }
 
-    public boolean isBottom() {
-        return bottom;
-    }
 
-    public void setBottom(boolean bottom) {
-        this.bottom = bottom;
-    }
+    //public void setBottom(boolean bottom) {
+     //   this.bottom = bottom;
+    //}
 
     public boolean isFillIconColor() {
         return fillIconColor;
@@ -345,8 +345,8 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         return text;
     }
 
-    public ImageView getIcon() {
-        return icon;
+    public ImageView getIconView() {
+        return iconView;
     }
 
     public boolean isHasIcon() {
@@ -355,31 +355,19 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
 
     @Override
     public void onClick(View v) {
-        //isSelected = true;
-        //view.setBackgroundColor(colorSelected);
 
-        /*if (hasSectionColor) {
-            text.setTextColor(iconColor);
-        }*/
+        if (sectionListener != null) {
+            final MaterialItemSection section = this;
 
-        if (listener != null) {
-            final MaterialSection section = this;
-            //view.playSoundEffect(android.view.SoundEffectConstants.CLICK);
-            changeListener.onBeforeChangeSection(this);
-            listener.onClick(section, v);
-            changeListener.onAfterChangeSection(this);
+            MaterialSectionChangeListener sectionChangeListener = drawer.getSectionChangeListener();
+
+            if(sectionChangeListener != null)
+                sectionChangeListener.onBeforeChangeSection(this);
+            sectionListener.onClick(section, v);
+
+            if(sectionChangeListener != null)
+                sectionChangeListener.onAfterChangeSection(this);
         }
-    }
-
-    public String getFragmentTitle() {
-        if (fragmentTitle == null || fragmentTitle.length() == 0)
-            return title;
-        else
-            return fragmentTitle;
-    }
-
-    public void setFragmentTitle(String fragmentTitle) {
-        this.fragmentTitle = fragmentTitle;
     }
 
     /**
@@ -393,17 +381,17 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        int a = event.getActionMasked();
-        switch (a) {
+        int actionEvent = event.getActionMasked();
+        switch (actionEvent) {
             case MotionEvent.ACTION_DOWN:
                 view.setBackgroundColor(colorOnPressHighlight);
-                return true;
+                return false;
             case MotionEvent.ACTION_CANCEL:
                 if (isSelected)
                     view.setBackgroundColor(colorSelected);
                 else
                     view.setBackgroundColor(colorUnpressed);
-                return true;
+                return false;
             case MotionEvent.ACTION_UP:
                 checkrefresh();
                 return false;
@@ -412,8 +400,8 @@ public class MaterialSection<Fragment, customTextView extends TextView> implemen
         }
     }
 
-
     public void checkrefresh() {
         if (!isSelected) view.setBackgroundColor(colorUnpressed);
     }
+
 }
