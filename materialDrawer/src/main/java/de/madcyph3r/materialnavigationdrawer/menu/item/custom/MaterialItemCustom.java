@@ -28,8 +28,9 @@ public class MaterialItemCustom extends MaterialMenuItem {
         TypedValue typedValue = new TypedValue();
         theme.resolveAttribute(R.attr.sectionStyle, typedValue, true);
         TypedArray values = theme.obtainStyledAttributes(typedValue.resourceId, R.styleable.MaterialSection);
-
         view = LayoutInflater.from(ctx).inflate(getItemLayout(values, res), null);
+
+
     }
 
     private int getItemLayout(TypedArray values, int defaultResId) {

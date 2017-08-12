@@ -1,9 +1,11 @@
 package de.madcyph3r.example;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import de.madcyph3r.example.example.FragmentInstruction;
+import de.madcyph3r.example.example.testLand.dgdemo;
 import de.madcyph3r.example.fragment.BackPatternFragment;
 import de.madcyph3r.example.fragment.DrawerTypesFragment;
 import de.madcyph3r.example.fragment.FunctionallyFragment;
@@ -15,6 +17,7 @@ import de.madcyph3r.example.fragment.ThemeFragment;
 import de.madcyph3r.materialnavigationdrawer.MaterialNavigationDrawer;
 import de.madcyph3r.materialnavigationdrawer.activity.MaterialNavNoHeaderActivity;
 import de.madcyph3r.materialnavigationdrawer.menu.MaterialMenu;
+import de.madcyph3r.materialnavigationdrawer.menu.item.section.MaterialItemSectionActivity;
 import de.madcyph3r.materialnavigationdrawer.menu.item.section.MaterialItemSectionFragment;
 import de.madcyph3r.materialnavigationdrawer.menu.item.style.MaterialItemDevisor;
 import de.madcyph3r.materialnavigationdrawer.menu.item.style.MaterialItemLabel;
@@ -43,6 +46,9 @@ public class MainActivity extends MaterialNavNoHeaderActivity {
         menu.add(new MaterialItemSectionFragment(this, "Instruction", new FragmentInstruction(), "Instruction"));
         menu.add(new MaterialItemDevisor());
         menu.add(new MaterialItemLabel(this, "Examples"));
+
+        Intent intent = new Intent(this, dgdemo.class);
+        menu.add(new MaterialItemSectionActivity(this, "dg demo", intent));
         menu.add(new MaterialItemSectionFragment(this, "Theme", new ThemeFragment(), "Theme").setSectionColor(Color.parseColor("#ff0000")));
         menu.add(new MaterialItemSectionFragment(this, "Drawer Types", new DrawerTypesFragment(), "Drawer Types").setSectionColor(Color.parseColor("#D35400")));
         menu.add(new MaterialItemSectionFragment(this, "Header Types", new HeaderTypesFragment(), "Header Types").setSectionColor(Color.parseColor("#01AEA1")));

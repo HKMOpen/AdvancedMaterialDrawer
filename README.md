@@ -2,6 +2,7 @@ AdvancedMaterialDrawer
 ======================
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-AdvancedMaterialDrawer-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/1617) [![API](https://img.shields.io/badge/API-10%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=10)
+[ ![Download](https://api.bintray.com/packages/jjhesk/maven/advMenu/images/download.svg) ](https://bintray.com/jjhesk/maven/advMenu/_latestVersion)
 
 [![Donate](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FXXJENAV99CNQ)
 
@@ -77,14 +78,13 @@ repositories {
 }
 
 dependencies {
-    compile 'de.madcyph3r:materialDrawer:2.0.0@aar'
+   compile 'com.hkm.ui:advMenu:2.0.5'
 }
 ```
 
 ### Dependencies
 ```java
-compile 'com.android.support:appcompat-v7:21.0.3'
-compile 'com.nineoldandroids:library:2.4.0'
+
 ```
 
 ### Usage
