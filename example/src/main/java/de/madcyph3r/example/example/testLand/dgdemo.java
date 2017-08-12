@@ -1,16 +1,20 @@
 package de.madcyph3r.example.example.testLand;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Toast;
 
+import de.madcyph3r.example.R;
 import de.madcyph3r.example.example.FragmentDummy;
 import de.madcyph3r.example.example.FragmentInstruction;
 import de.madcyph3r.materialnavigationdrawer.MaterialNavigationDrawer;
 import de.madcyph3r.materialnavigationdrawer.activity.MaterialNavHeadItemActivity;
+import de.madcyph3r.materialnavigationdrawer.activity.MaterialNavNoHeaderActivity;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialSectionOnClickListener;
 import de.madcyph3r.materialnavigationdrawer.menu.MaterialMenu;
+import de.madcyph3r.materialnavigationdrawer.menu.head.FullCustomHead;
 import de.madcyph3r.materialnavigationdrawer.menu.item.custom.MaterialItemCustom;
 import de.madcyph3r.materialnavigationdrawer.menu.item.section.MaterialItemSection;
 import de.madcyph3r.materialnavigationdrawer.menu.item.section.MaterialItemSectionFragment;
@@ -20,15 +24,22 @@ import de.madcyph3r.materialnavigationdrawer.menu.item.section.MaterialItemSecti
  * Created by hesk on 12/8/2017.
  */
 
-public class dgdemo extends MaterialNavHeadItemActivity {
+public class dgdemo extends MaterialNavNoHeaderActivity {
     MaterialNavigationDrawer drawer = null;
+
+    private class FF extends MaterialItemCustom {
+
+        public FF(Context ctx) {
+            super(ctx, R.layout.custom_logo);
+
+        }
+    }
 
     private MaterialMenu parent_menu() {
 
         // create menu
         MaterialMenu menu = new MaterialMenu();
         //MaterialItemCustom mc = new MaterialItemCustom(this, );
-
         MaterialItemSectionOnClick section = new MaterialItemSectionOnClick(this, "Cinemas");
         section.setOnSectionClickListener(new MaterialSectionOnClickListener() {
             @Override
@@ -37,7 +48,8 @@ public class dgdemo extends MaterialNavHeadItemActivity {
                 item_from_home();
             }
         });
-
+        FF ful = new FF(this);
+        menu.add(ful);
         menu.add(section);
         MaterialItemSectionOnClick section1 = new MaterialItemSectionOnClick(this, "Eat & Drink");
         section1.setOnSectionClickListener(new MaterialSectionOnClickListener() {

@@ -11,7 +11,7 @@ import de.madcyph3r.example.example.FragmentDummy;
 import de.madcyph3r.example.example.FragmentInstruction;
 import de.madcyph3r.materialnavigationdrawer.MaterialNavigationDrawer;
 import de.madcyph3r.materialnavigationdrawer.activity.MaterialNavHeadItemActivity;
-import de.madcyph3r.materialnavigationdrawer.head.MaterialHeadItem;
+import de.madcyph3r.materialnavigationdrawer.menu.head.MaterialHeadItem;
 import de.madcyph3r.materialnavigationdrawer.menu.MaterialMenu;
 import de.madcyph3r.materialnavigationdrawer.menu.item.section.MaterialItemSectionFragment;
 import de.madcyph3r.materialnavigationdrawer.tools.RoundedCornersDrawable;

@@ -27,7 +27,7 @@ import java.util.List;
 
 import de.madcyph3r.materialnavigationdrawer.MaterialNavigationDrawer;
 import de.madcyph3r.materialnavigationdrawer.R;
-import de.madcyph3r.materialnavigationdrawer.head.MaterialHeadItem;
+import de.madcyph3r.materialnavigationdrawer.menu.head.MaterialHeadItem;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialHeadItemChangeListener;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialSectionOnClickListener;
 import de.madcyph3r.materialnavigationdrawer.menu.MaterialMenu;

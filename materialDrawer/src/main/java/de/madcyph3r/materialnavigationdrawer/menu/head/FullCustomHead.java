@@ -1,4 +1,4 @@
-package de.madcyph3r.materialnavigationdrawer.menu.item.custom;
+package de.madcyph3r.materialnavigationdrawer.menu.head;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,11 +11,15 @@ import android.view.View;
 import de.madcyph3r.materialnavigationdrawer.R;
 import de.madcyph3r.materialnavigationdrawer.menu.item.MaterialMenuItem;
 
-public class MaterialItemCustom extends MaterialMenuItem {
+/**
+ * Created by hesk on 12/8/2017.
+ */
+
+public class FullCustomHead extends MaterialMenuItem {
 
     private View view;
 
-    public MaterialItemCustom(Context ctx, int resID) {
+    public FullCustomHead(Context ctx, int resID) {
         init(ctx, resID);
     }
 
@@ -45,4 +49,5 @@ public class MaterialItemCustom extends MaterialMenuItem {
     public View getView() {
         return view;
     }
+
 }

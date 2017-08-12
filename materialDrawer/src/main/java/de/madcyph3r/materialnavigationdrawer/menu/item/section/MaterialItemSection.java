@@ -304,7 +304,6 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
      * Set the number of notification for this section
      *
      * @param notifications the number of notification active for this section
-     * @return this section
      */
     public void setNotifications(int notifications) {
         String textNotification;

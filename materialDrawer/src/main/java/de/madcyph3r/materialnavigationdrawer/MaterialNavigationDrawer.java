@@ -14,11 +14,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +39,7 @@ import java.util.List;
 import de.madcyph3r.materialnavigationdrawer.custom.DefaultDrawerListener;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialSectionChangeListener;
 import de.madcyph3r.materialnavigationdrawer.menu.MaterialMenu;
+import de.madcyph3r.materialnavigationdrawer.menu.head.FullCustomHead;
 import de.madcyph3r.materialnavigationdrawer.menu.item.MaterialMenuItem;
 import de.madcyph3r.materialnavigationdrawer.menu.item.custom.MaterialItemCustom;
 import de.madcyph3r.materialnavigationdrawer.menu.item.section.MaterialItemSection;
@@ -76,7 +77,7 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
     // global vars view menu
     protected LinearLayout itemSections;
     protected LinearLayout itemBottomSections;
-
+    protected LinearLayout nullableheader;
     // global vars menu
     private MaterialItemSectionFragment currentSectionFragment;
     protected MaterialMenu currentMenu;
@@ -268,6 +269,11 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
         // set items
         itemSections = (LinearLayout) this.findViewById(R.id.sections);
         itemBottomSections = (LinearLayout) this.findViewById(R.id.bottom_sections);
+
+
+        nullableheader = (LinearLayout) this.findViewById(R.id.drawer_header);
+
+
     }
 
 
@@ -401,52 +407,57 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
     // protected abstract MaterialMenu loadMenuType();
 
     protected void loadMenu(MaterialMenu menu, boolean forceReload) {
+        try {
+            if (menu != null && (menu != currentMenu || forceReload)) {
 
-        if (menu != null && (menu != currentMenu || forceReload)) {
+                // set the new current menu
+                currentMenu = menu;
 
-            // set the new current menu
-            currentMenu = menu;
+                itemSections.removeAllViews();
+                itemBottomSections.removeAllViews();
+                // create Menu
+                List<MaterialMenuItem> itemList = menu.getItems();
+                for (int i = 0; i < itemList.size(); i++) {
+                    if (itemList.get(i) instanceof FullCustomHead) {
+                        addHeaderItem((FullCustomHead) itemList.get(i));
+                    } else if (itemList.get(i) instanceof MaterialItemSection) {
+                        MaterialItemSection section = (MaterialItemSection) itemList.get(i);
+                        if (section.isBottom())
+                            addBottomSection((MaterialItemSection) itemList.get(i));
+                        else
+                            addSection((MaterialItemSection) itemList.get(i));
+                    } else if (itemList.get(i) instanceof MaterialItemCustom) {
+                        MaterialItemCustom custom = (MaterialItemCustom) itemList.get(i);
+                        if (custom.isBottom())
+                            addBottomCustom((MaterialItemCustom) itemList.get(i));
+                        else
+                            addCustom((MaterialItemCustom) itemList.get(i));
+                    } else if (itemList.get(i) instanceof MaterialItemDevisor) {
+                        MaterialItemDevisor devisor = (MaterialItemDevisor) itemList.get(i);
+                        if (devisor.isBottom())
+                            addDevisorBottom();
+                        else
+                            addDevisor();
+                    } else if (itemList.get(i) instanceof MaterialItemLabel) {
+                        MaterialItemLabel label = (MaterialItemLabel) itemList.get(i);
+                        if (label.isBottom())
+                            addBottomLabel((MaterialItemLabel) itemList.get(i));
+                        else
+                            addLabel((MaterialItemLabel) itemList.get(i));
+                    }
+                }
 
-            itemSections.removeAllViews();
-            itemBottomSections.removeAllViews();
-            // create Menu
-            List<MaterialMenuItem> itemList = menu.getItems();
-            for (int i = 0; i < itemList.size(); i++) {
-                if (itemList.get(i) instanceof MaterialItemSection) {
-                    MaterialItemSection section = (MaterialItemSection) itemList.get(i);
-                    if (section.isBottom())
-                        addBottomSection((MaterialItemSection) itemList.get(i));
-                    else
-                        addSection((MaterialItemSection) itemList.get(i));
-                } else if (itemList.get(i) instanceof MaterialItemCustom) {
-                    MaterialItemCustom custom = (MaterialItemCustom) itemList.get(i);
-                    if (custom.isBottom())
-                        addBottomCustom((MaterialItemCustom) itemList.get(i));
-                    else
-                        addCustom((MaterialItemCustom) itemList.get(i));
-                } else if (itemList.get(i) instanceof MaterialItemDevisor) {
-                    MaterialItemDevisor devisor = (MaterialItemDevisor) itemList.get(i);
-                    if (devisor.isBottom())
-                        addDevisorBottom();
-                    else
-                        addDevisor();
-                } else if (itemList.get(i) instanceof MaterialItemLabel) {
-                    MaterialItemLabel label = (MaterialItemLabel) itemList.get(i);
-                    if (label.isBottom())
-                        addBottomLabel((MaterialItemLabel) itemList.get(i));
-                    else
-                        addLabel((MaterialItemLabel) itemList.get(i));
+                // unselect all items
+                for (int i = 0; i < itemList.size(); i++) {
+                    try {
+                        ((MaterialItemSection) itemList.get(i)).unSelect();
+                    } catch (ClassCastException e) {
+                        // nothing to do here
+                    }
                 }
             }
-
-            // unselect all items
-            for (int i = 0; i < itemList.size(); i++) {
-                try {
-                    ((MaterialItemSection) itemList.get(i)).unSelect();
-                } catch (ClassCastException e) {
-                    // nothing to do here
-                }
-            }
+        } catch (Exception e) {
+            Log.d("error", "there is an error:: " + e.getMessage());
         }
     }
 
@@ -496,7 +507,7 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
             currentSectionFragment = section;
 
             // try to select. then it doesn't work, it's not the current menu
-            if(currentMenu.getItems().contains(currentSectionFragment)) {
+            if (currentMenu.getItems().contains(currentSectionFragment)) {
                 section.select();
                 sectionFragmentLastBackPatternList.add(section);
             }
@@ -695,6 +706,12 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
         itemBottomSections.addView(custom.getView(), params);
     }
 
+    protected void addHeaderItem(FullCustomHead custom) {
+        if (nullableheader != null) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (48 * displayDensity));
+            nullableheader.addView(custom.getView(), params);
+        }
+    }
 
     /**
      * the actual thing to add the devisor
@@ -744,7 +761,9 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
 
     public int drawerWidthInit() {
         return 0;
-    };
+    }
+
+    ;
 
     public abstract void afterInit(Bundle savedInstanceState);
 
@@ -850,12 +869,12 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
                 break;
             case BACKPATTERN_LAST_SECTION_FRAGMENT:
 
-                int lastPos = sectionFragmentLastBackPatternList.size()-1;
+                int lastPos = sectionFragmentLastBackPatternList.size() - 1;
 
                 // do not load the current fragment again
                 if (sectionFragmentLastBackPatternList.size() > 0 && currentSectionFragment == sectionFragmentLastBackPatternList.get(lastPos)) {
                     sectionFragmentLastBackPatternList.remove(lastPos);
-                    lastPos = sectionFragmentLastBackPatternList.size()-1;
+                    lastPos = sectionFragmentLastBackPatternList.size() - 1;
                 }
 
                 if (sectionFragmentLastBackPatternList.size() == 0) {
@@ -902,7 +921,7 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
             if (section != currentSectionFragment) {
                 if (section instanceof MaterialItemSectionFragment) {
 
-                    sectionFragmentLastBackPatternList.add((MaterialItemSectionFragment)section);
+                    sectionFragmentLastBackPatternList.add((MaterialItemSectionFragment) section);
 
                     //unSelectOldSection(section);
                     MaterialItemSectionFragment sectionFragment = (MaterialItemSectionFragment) section;

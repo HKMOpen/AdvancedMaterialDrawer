@@ -1,4 +1,4 @@
-package de.madcyph3r.materialnavigationdrawer.head;
+package de.madcyph3r.materialnavigationdrawer.menu.head;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

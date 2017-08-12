@@ -26,10 +26,8 @@ public abstract class MaterialNavNoHeaderActivity extends MaterialNavigationDraw
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // DEVELOPER CALL TO INIT
         init(savedInstanceState);
-
         afterInit(savedInstanceState);
     }
 

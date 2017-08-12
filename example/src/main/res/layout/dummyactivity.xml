@@ -18,11 +18,11 @@
         android:weightSum="1">
 
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dummy Activity"
-            android:id="@+id/textView3"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1.10" />
+            android:layout_weight="1.10"
+            android:text="Dummy Activity" />
     </LinearLayout>
 </RelativeLayout>
