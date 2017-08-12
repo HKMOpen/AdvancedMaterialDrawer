@@ -99,10 +99,16 @@ public class HeadItemThreeChangeListenerActivity extends MaterialNavHeadItemActi
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("B", Color.BLUE);
 
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", headPhoto, R.drawable.mat6, menu);
+
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GREEN);
+        headPhoto.setText("B");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", icon, R.drawable.mat6, menu);
 
         return headItem;
     }
@@ -115,9 +121,17 @@ public class HeadItemThreeChangeListenerActivity extends MaterialNavHeadItemActi
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("C", Color.GRAY);
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "C HeadItem", "C Subtitle", headPhoto, R.drawable.mat6, menu);
+
+
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GREEN);
+        headPhoto.setText("B");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+
+
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "C HeadItem", "C Subtitle", icon, R.drawable.mat6, menu);
 
         return headItem;
     }

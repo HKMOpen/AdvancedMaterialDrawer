@@ -110,9 +110,14 @@ public class AddRemoveHeadItemRuntimeActivity extends MaterialNavHeadItemActivit
 
 
         // create headItem
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("B", Color.BLUE);
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem No Menu", "B Subtitle", headPhoto, R.drawable.mat6, menu);
+        // create Head Item
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GRAY);
+        headPhoto.setText("C");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem No Menu", "B Subtitle", icon, R.drawable.mat6, menu);
 
         return headItem;
     }
@@ -126,9 +131,18 @@ public class AddRemoveHeadItemRuntimeActivity extends MaterialNavHeadItemActivit
         menu.add(new MaterialItemSectionFragment(this, "Section 2 (Head " + headCount + ")", new FragmentDummy(), "Section 2 (Head " + headCount + ")"));
 
         // create headItem
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound(headCount+"", Color.BLUE);
-        MaterialHeadItem headItem = new MaterialHeadItem(this, headCount+" HeadItem No Menu", headCount+" Subtitle", headPhoto, R.drawable.mat6, menu);
+
+
+        // create Head Item
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GRAY);
+        headPhoto.setText(headCount+"");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+
+
+        MaterialHeadItem headItem = new MaterialHeadItem(this, headCount+" HeadItem No Menu", headCount+" Subtitle", icon, R.drawable.mat6, menu);
 
         // counter for the new headItem
         headCount++;

@@ -87,10 +87,14 @@ public class HeadItemFiveDontCloseOnChangeActivity extends MaterialNavHeadItemAc
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("B", Color.BLUE);
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.BLUE);
+        headPhoto.setText("B");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
 
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", headPhoto, R.drawable.mat6, menu);
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", icon, R.drawable.mat6, menu);
         headItem.setCloseDrawerOnChanged(false); // don't close the drawer, if this head item chosen
 
         return headItem;
@@ -104,9 +108,20 @@ public class HeadItemFiveDontCloseOnChangeActivity extends MaterialNavHeadItemAc
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("C", Color.GRAY);
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "C HeadItem", "C Subtitle", headPhoto, R.drawable.mat6, menu);
+
+
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GRAY);
+        headPhoto.setText("C");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+
+
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "C HeadItem", "C Subtitle", icon, R.drawable.mat6, menu);
+
+
+
         headItem.setCloseDrawerOnChanged(false); // don't close the drawer, if this head item chosen
 
         return headItem;
@@ -120,9 +135,16 @@ public class HeadItemFiveDontCloseOnChangeActivity extends MaterialNavHeadItemAc
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("D", Color.GRAY);
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "D HeadItem", "D Subtitle", headPhoto, R.drawable.mat6, menu);
+
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GRAY);
+        headPhoto.setText("C");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+
+
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "D HeadItem", "D Subtitle", icon, R.drawable.mat6, menu);
         headItem.setCloseDrawerOnChanged(false); // don't close the drawer, if this head item chosen
 
         return headItem;
@@ -136,9 +158,15 @@ public class HeadItemFiveDontCloseOnChangeActivity extends MaterialNavHeadItemAc
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("E", Color.GRAY);
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "E HeadItem", "E Subtitle", headPhoto, R.drawable.mat6, menu);
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GREEN);
+        headPhoto.setText("E");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+
+
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "E HeadItem", "E Subtitle", icon, R.drawable.mat6, menu);
         headItem.setCloseDrawerOnChanged(false); // don't close the drawer, if this head item chosen
 
         return headItem;

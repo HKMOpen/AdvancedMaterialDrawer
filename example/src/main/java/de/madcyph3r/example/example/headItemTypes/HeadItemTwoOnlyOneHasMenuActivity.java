@@ -82,10 +82,14 @@ public class HeadItemTwoOnlyOneHasMenuActivity extends MaterialNavHeadItemActivi
     private MaterialHeadItem getHeadItem2() {
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("B", Color.BLUE);
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GREEN);
+        headPhoto.setText("B");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
 
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", headPhoto, R.drawable.mat6);
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", icon, R.drawable.mat6);
 
         // don't change fragment on change, because there is no menu. Or you get an exception
         headItem.setLoadFragmentOnChanged(false);

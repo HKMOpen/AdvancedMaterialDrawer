@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -50,7 +51,7 @@ import de.madcyph3r.materialnavigationdrawer.tools.Utils;
 
 
 @SuppressLint("InflateParams")
-public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends TextView> extends ActionBarActivity implements MaterialSectionOnClickListener/*, MaterialSectionChangeListener*/ {
+public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends TextView> extends AppCompatActivity implements MaterialSectionOnClickListener/*, MaterialSectionChangeListener*/ {
 
     // static backpattern types
     public static final int BACKPATTERN_BACK_ANYWHERE = 0;

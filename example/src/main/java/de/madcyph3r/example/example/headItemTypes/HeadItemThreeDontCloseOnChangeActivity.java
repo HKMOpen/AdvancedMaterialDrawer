@@ -38,9 +38,9 @@ public class HeadItemThreeDontCloseOnChangeActivity extends MaterialNavHeadItemA
         drawer = this;
 
         // add head Item (menu will be loaded automatically)
-        this.addHeadItem(getHeadItem1());
         this.addHeadItem(getHeadItem2());
         this.addHeadItem(getHeadItem3());
+        this.addHeadItem(getHeadItem1());
 
         // load menu
         this.loadMenu(getCurrentHeadItem().getMenu());
@@ -67,7 +67,6 @@ public class HeadItemThreeDontCloseOnChangeActivity extends MaterialNavHeadItemA
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
         menu.add(new MaterialItemSectionFragment(this, "Section 3", new FragmentDummy(), "Section 3"));
 
-
         // create Head Item
         // use bitmap and make a circle photo
         final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.head_item_icon);
@@ -86,10 +85,14 @@ public class HeadItemThreeDontCloseOnChangeActivity extends MaterialNavHeadItemA
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("B", Color.BLUE);
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GREEN);
+        headPhoto.setText("B");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
 
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", headPhoto, R.drawable.mat6, menu);
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "B HeadItem", "B Subtitle", icon, R.drawable.mat6, menu);
         headItem.setCloseDrawerOnChanged(false); // don't close the drawer, if this head item chosen
 
         return headItem;
@@ -103,9 +106,14 @@ public class HeadItemThreeDontCloseOnChangeActivity extends MaterialNavHeadItemA
         menu.add(new MaterialItemSectionFragment(this, "Section 2", new FragmentDummy(), "Section 2"));
 
         // create Head Item
-        TextDrawable headPhoto = TextDrawable.builder()
-                .buildRound("C", Color.GRAY);
-        MaterialHeadItem headItem = new MaterialHeadItem(this, "C HeadItem", "C Subtitle", headPhoto, R.drawable.mat6, menu);
+        TextDrawable.Builder headPhoto = new TextDrawable.Builder();
+        headPhoto.setColor(Color.GREEN);
+        headPhoto.setText("G");
+        headPhoto.setShape(TextDrawable.DRAWABLE_SHAPE_ROUND_RECT);
+        headPhoto.setBorderThickness(3);
+        TextDrawable icon = headPhoto.build();
+
+        MaterialHeadItem headItem = new MaterialHeadItem(this, "C HeadItem", "C Subtitle", icon, R.drawable.mat6, menu);
         headItem.setCloseDrawerOnChanged(false); // don't close the drawer, if this head item chosen
 
         return headItem;
