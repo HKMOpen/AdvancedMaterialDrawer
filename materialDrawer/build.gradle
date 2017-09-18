@@ -26,4 +26,4 @@ dependencies {
     compile supportDependencies.appCompat
 }
 
-apply from: 'bintrayrelease.gradle'
+apply from: 'br.gradle'
