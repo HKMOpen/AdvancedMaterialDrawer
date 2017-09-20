@@ -21,11 +21,6 @@ allprojects {
 }
 
 ext {
-    videoNetworkSDK = '0.1.5'
-    ftKit = '0.4.1'
-    uidebug = '0.1.0'
-    collection_ui = '0.2.0'
-    precompile_file_name = 'dllocker-publishing_package-release'
 
     //Support Libraries dependencies
     supportDependencies = [
@@ -40,12 +35,8 @@ ext {
             palette               : "com.android.support:palette-v7:${SUPPORT_LIBRARY}",
 
 
-            kitCore               : "com.52inc:52Kit-core:${ftKit}",
             butterknife           : "com.jakewharton:butterknife:8.6.0",
             butterknifeapt        : "com.jakewharton:butterknife-compiler:8.6.0",
-            vdosdk                : "com.hkm.mediaSDK:mdsdk:${videoNetworkSDK}",
-            vdoTestUI             : "com.hkm.mediaSDK:mdui:${uidebug}",
-            uiframwork            : "com.hkm.layoutcollection:ui:${collection_ui}",
 
             retrofitAdapter       : "com.squareup.retrofit2:retrofit-adapters:${RETROFIT_LIBRARY}",
             retrofitCore          : "com.squareup.retrofit2:retrofit:${RETROFIT_LIBRARY}",

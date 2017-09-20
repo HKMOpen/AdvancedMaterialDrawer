@@ -6,9 +6,9 @@ android {
 
     defaultConfig {
         applicationId "de.madcyph3r.MaterialDrawer"
-        minSdkVersion 10
+        minSdkVersion 17
         targetSdkVersion project.ANDROID_BUILD_TARGET_SDK_VERSION as int
-        versionCode 10
+        versionCode 15
         versionName "2.3"
     }
     buildTypes {
@@ -23,7 +23,11 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-
+    jcenter()
+    maven {
+        url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+    }
+    mavenLocal()
     maven {
         url "https://jitpack.io"
     }
@@ -35,4 +39,5 @@ dependencies {
     compile 'com.github.JingkaiTang:TextDrawable:1.1.1'
     compile project(':materialDrawer')
     compile 'com.github.kanytu:android-parallax-recyclerview:v1.2'
+    compile 'com.hkm.ui:advancedtoolbar:1.1.10'
 }

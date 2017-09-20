@@ -26,6 +26,14 @@
         <!--<item name="colorPrimaryDark">#1C375B</item>-->
     </style>
 
+    <style name="DG_Lib" parent="MaterialNavigationDrawerTheme.Light">
+        <item name="uniqueToolbarColor">false</item>
+        <item name="autoDarkStatusBar">false</item>
+        <item name="actionBarOverlayAlpha">1.0</item>
+        <item name="belowToolbar">false</item>
+        <item name="drawerActionBarStyle">@style/beastbarSteup</item>
+    </style>
+
     <style name="MyOwnTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
         <item name="colorPrimary">#8bc34a</item>
         <item name="labelColor">#E67E22</item>

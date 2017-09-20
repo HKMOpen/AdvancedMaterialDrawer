@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".example.testLand.dgdemo"
-            android:theme="@style/MaterialNavigationDrawerTheme" />
+            android:theme="@style/DG_Lib" />
         <!-- Theme: -->
         <!-- dark theme -->
         <activity
