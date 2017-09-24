@@ -394,4 +394,40 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         if (!isSelected) view.setBackgroundColor(colorUnpressed);
     }
 
+
+    protected final void showRightIcon() {
+        if (section_right_icon != null) {
+            section_right_icon.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected final void hideRightIcon() {
+        if (section_right_icon != null) {
+            section_right_icon.setVisibility(View.GONE);
+        }
+    }
+
+    protected final void showText() {
+        if (text != null) {
+            text.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected final void hideText() {
+        if (text != null) {
+            text.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    protected final void showNotification() {
+        if (notifications != null) {
+            notifications.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    protected final void hideNotification() {
+        if (notifications != null) {
+            notifications.setVisibility(View.GONE);
+        }
+    }
 }
