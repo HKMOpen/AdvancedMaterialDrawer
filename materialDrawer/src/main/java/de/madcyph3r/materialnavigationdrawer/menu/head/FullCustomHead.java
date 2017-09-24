@@ -34,8 +34,8 @@ public class FullCustomHead extends MaterialMenuItem {
         TypedArray values = theme.obtainStyledAttributes(typedValue.resourceId, R.styleable.MaterialSection);
         view = LayoutInflater.from(ctx).inflate(getItemLayout(values, res), null);
     }
-
-    private int getItemLayout(TypedArray values, int defaultResId) {
+    @Override
+    protected int getItemLayout(TypedArray values, int defaultResId) {
         int resId = values.getResourceId(R.styleable.MaterialSection_section_item_layout, -1);
         if (resId == -1) {
             Log.d("not", "got -1");
@@ -46,6 +46,7 @@ public class FullCustomHead extends MaterialMenuItem {
         }
     }
 
+    @Override
     public View getView() {
         return view;
     }

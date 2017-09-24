@@ -18,14 +18,14 @@ public class MaterialItemLabel extends MaterialMenuItem {
     private String label;
     private View view;
     private TextView text;
-   // private boolean bottom;
+    // private boolean bottom;
 
     public MaterialItemLabel(Context ctx, String label) {
         this.label = label;
- //       setBottom(bottom);
+        //       setBottom(bottom);
 
-        view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_label, null);
-        text = (TextView) view.findViewById(R.id.section_label);
+        view = inflatView(R.layout.layout_material_label, ctx);
+        text = (TextView) view.findViewById(R.id.amd_layout_text);
 
         Resources.Theme theme = ctx.getTheme();
         TypedValue typedValue = new TypedValue();
@@ -44,6 +44,7 @@ public class MaterialItemLabel extends MaterialMenuItem {
         this.label = label;
     }
 
+    @Override
     public View getView() {
         return view;
     }

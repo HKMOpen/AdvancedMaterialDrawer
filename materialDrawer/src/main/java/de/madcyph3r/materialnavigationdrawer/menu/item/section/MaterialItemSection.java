@@ -5,9 +5,8 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.Log;
+import android.support.annotation.LayoutRes;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,24 +18,24 @@ import de.madcyph3r.materialnavigationdrawer.R;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialSectionChangeListener;
 import de.madcyph3r.materialnavigationdrawer.listener.MaterialSectionOnClickListener;
 import de.madcyph3r.materialnavigationdrawer.menu.item.MaterialMenuItem;
+import de.madcyph3r.materialnavigationdrawer.listener.Selectable;
 import de.madcyph3r.materialnavigationdrawer.ripple.MaterialPlain;
 import de.madcyph3r.materialnavigationdrawer.ripple.MaterialRippleLayout;
 import de.madcyph3r.materialnavigationdrawer.ripple.MaterialRippleLayoutNineOld;
 
-public abstract class MaterialItemSection<CustomTextView extends TextView> extends MaterialMenuItem implements View.OnTouchListener, View.OnClickListener {
+public abstract class MaterialItemSection<CustomTextView extends TextView> extends MaterialMenuItem implements View.OnTouchListener, View.OnClickListener, Selectable {
 
 
     private MaterialNavigationDrawer drawer;
     private View view;
     private CustomTextView text;
     private CustomTextView notifications;
-    private ImageView iconView;
+    private ImageView section_left_icon;
+    private ImageView section_right_icon;
     protected MaterialSectionOnClickListener sectionListener;
-
     private boolean isSelected;
     private int sectionColor;
     private boolean fillIconColor;
-
     private boolean hasSectionColor;
     private boolean hasColorDark;
     private int colorUnpressed;
@@ -46,11 +45,8 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
     private int colorDark;
     private int textColor;
     private int notificationColor;
-
     private int numberNotifications;
-
     protected String title;
-
     private boolean hasIcon = false;
     private boolean sectionDivided = false;
 
@@ -58,17 +54,9 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
     /*public MaterialItemSection(Context ctx, boolean hasIcon, int target, boolean bottom, MaterialSectionChangeListener changeListener, boolean fullBanner) {
         init(ctx, hasIcon, target, bottom, changeListener, fullBanner);
     }*/
-
-    private int getItemLayout(TypedArray values, int defaultResId) {
-        int resId = values.getResourceId(R.styleable.MaterialSection_section_item_layout, -1);
-
-        if (resId == -1) {
-            Log.d("not", "got -1");
-            return defaultResId;
-        } else {
-            Log.d("not", "resId > -1");
-            return resId;
-        }
+    @LayoutRes
+    protected int getLayoutRes() {
+        return -1;
     }
 
     @SuppressLint("WrongViewCast")
@@ -84,97 +72,95 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         theme.resolveAttribute(R.attr.sectionStyle, typedValue, true);
         TypedArray values = theme.obtainStyledAttributes(typedValue.resourceId, R.styleable.MaterialSection);
 
-        if(iconDrawable == null) {
+        if (iconDrawable == null) {
             hasIcon = false;
         } else {
-
             hasIcon = true;
         }
-
-
-        // inflate the right layout
-        if (!hasIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section), null);
-        } else if(!hasIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section_nine_old), null);
-        } else if(hasIcon && !fullWidthIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section_icon), null);
-            iconView = (ImageView) view.findViewById(R.id.section_icon);
-            setIconView(iconDrawable);
-        } else if(hasIcon && !fullWidthIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            view = LayoutInflater.from(drawer).inflate(getItemLayout(values, R.layout.layout_material_section_icon_nine_old), null);
-            iconView = (ImageView) view.findViewById(R.id.section_icon);
-            setIconView(iconDrawable);
-        } else if(hasIcon && fullWidthIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            view = LayoutInflater.from(drawer).inflate(R.layout.layout_material_section_full_image, null);
-            iconView = (ImageView) view.findViewById(R.id.section_icon);
-            setIconView(iconDrawable);
-        } else if(hasIcon && fullWidthIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            view = LayoutInflater.from(drawer).inflate(R.layout.layout_material_section_full_image_nine_old, null);
-            iconView = (ImageView) view.findViewById(R.id.section_icon);
-            setIconView(iconDrawable);
+        if (getLayoutRes() == -1) {
+            // inflate the right layout
+            if (!hasIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                view = inflatView(getItemLayout(values, R.layout.layout_material_section), drawer);
+            } else if (!hasIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                view = inflatView(getItemLayout(values, R.layout.layout_material_section_nine_old), drawer);
+            } else if (hasIcon && !fullWidthIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                view = inflatView(getItemLayout(values, R.layout.layout_material_section_icon), drawer);
+                section_left_icon = (ImageView) view.findViewById(R.id.amd_layout_left_icon);
+                setIconView(iconDrawable);
+            } else if (hasIcon && !fullWidthIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                view = inflatView(getItemLayout(values, R.layout.layout_material_section_icon_nine_old), drawer);
+                section_left_icon = (ImageView) view.findViewById(R.id.amd_layout_left_icon);
+                setIconView(iconDrawable);
+            } else if (hasIcon && fullWidthIcon && currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                view = inflatView(R.layout.layout_material_section_full_image, drawer);
+                section_left_icon = (ImageView) view.findViewById(R.id.amd_layout_left_icon);
+                setIconView(iconDrawable);
+            } else if (hasIcon && fullWidthIcon && currentApiVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                view = inflatView(R.layout.layout_material_section_full_image_nine_old, drawer);
+                section_left_icon = (ImageView) view.findViewById(R.id.amd_layout_left_icon);
+                setIconView(iconDrawable);
+            }
+        } else {
+            view = inflatView(getLayoutRes(), drawer);
         }
 
-        notifications = (CustomTextView) view.findViewById(R.id.section_notification);
-        text = (CustomTextView) view.findViewById(R.id.section_text);
+        try {
+            text = (CustomTextView) view.findViewById(R.id.amd_layout_text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            notifications = (CustomTextView) view.findViewById(R.id.amd_layout_notification);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            section_left_icon = (ImageView) view.findViewById(R.id.amd_layout_left_icon);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            section_right_icon = (ImageView) view.findViewById(R.id.amd_layout_right_icon);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // hide text on icon banner
-        if(hasIcon && fullWidthIcon) {
+        if (hasIcon && fullWidthIcon) {
             text.setVisibility(View.GONE);
             notifications.setVisibility(View.GONE);
         }
 
-
-        /*
-        if (!hasIcon) {
-            if (currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                view = LayoutInflater.from(ctx).inflate(getItemLayout(values, R.layout.layout_material_section), null);
-            } else {
-                view = LayoutInflater.from(ctx).inflate(getItemLayout(values, R.layout.layout_material_section_nine_old), null);
-            }
-        } else {
-            if (!fullWidthIcon) {
-                if (currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    view = LayoutInflater.from(ctx).inflate(getItemLayout(values, R.layout.layout_material_section_icon), null);
-                } else {
-                    view = LayoutInflater.from(ctx).inflate(getItemLayout(values, R.layout.layout_material_section_icon_nine_old), null);
-                }
-            } else {
-                if (currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section_full_image, null);
-                } else {
-                    view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section_full_image_nine_old, null);
-                }
-            }
-            iconView = (ImageView) view.findViewById(R.id.section_icon);
-        }*/
-
-
-
-
-
         int rippleColor = values.getColor(R.styleable.MaterialSection_sectionRippleColor, 0x16000000);
-
-        if (view.findViewById(R.id.section_ripple) instanceof MaterialRippleLayout) {
-            MaterialRippleLayout rippleLayout = (MaterialRippleLayout) view.findViewById(R.id.section_ripple);
-            rippleLayout.setRippleColor(rippleColor);
-            rippleLayout.setOnClickListener(this);
-            rippleLayout.setOnTouchListener(this);
-        } else if (view.findViewById(R.id.section_ripple) instanceof MaterialRippleLayoutNineOld) {
-            MaterialRippleLayoutNineOld rippleLayout = (MaterialRippleLayoutNineOld) view.findViewById(R.id.section_ripple);
-            rippleLayout.setRippleColor(rippleColor);
-            rippleLayout.setOnClickListener(this);
-            rippleLayout.setOnTouchListener(this);
-        } else if (view.findViewById(R.id.section_ripple) instanceof MaterialPlain) {
-            MaterialPlain rippleLayout = (MaterialPlain) view.findViewById(R.id.section_ripple);
-            rippleLayout.setOnClickListener(this);
-            rippleLayout.setOnTouchListener(this);
-        } else if (view.findViewById(R.id.section_relative_layout) instanceof RelativeLayout) {
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.section_relative_layout);
-            relativeLayout.setOnClickListener(this);
-            relativeLayout.setOnTouchListener(this);
+        try {
+            if (view.findViewById(R.id.amd_layout_touch_area) instanceof RelativeLayout) {
+                RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.amd_layout_touch_area);
+                relativeLayout.setOnClickListener(this);
+                relativeLayout.setOnTouchListener(this);
+            } else if (view.findViewById(R.id.amd_layout_ripple) instanceof MaterialPlain) {
+                MaterialPlain rippleLayout = (MaterialPlain) view.findViewById(R.id.amd_layout_ripple);
+                rippleLayout.setOnClickListener(this);
+                rippleLayout.setOnTouchListener(this);
+            } else if (view.findViewById(R.id.amd_layout_ripple) instanceof MaterialRippleLayout) {
+                MaterialRippleLayout rippleLayout = (MaterialRippleLayout) view.findViewById(R.id.section_ripple);
+                rippleLayout.setRippleColor(rippleColor);
+                rippleLayout.setOnClickListener(this);
+                rippleLayout.setOnTouchListener(this);
+            } else if (view.findViewById(R.id.amd_layout_ripple) instanceof MaterialRippleLayoutNineOld) {
+                MaterialRippleLayoutNineOld rippleLayout = (MaterialRippleLayoutNineOld) view.findViewById(R.id.section_ripple);
+                rippleLayout.setRippleColor(rippleColor);
+                rippleLayout.setOnClickListener(this);
+                rippleLayout.setOnTouchListener(this);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         //colorPressed = values.getColor(R.styleable.MaterialSection_sectionBackgroundColorPressed, 0x16000000);
         colorUnpressed = values.getColor(R.styleable.MaterialSection_sectionBackgroundColor, 0x00FFFFFF);
         colorSelected = values.getColor(R.styleable.MaterialSection_sectionBackgroundColorSelected, 0x0A000000);
@@ -201,7 +187,12 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         fillIconColor = true;
     }
 
+    @Override
+    public boolean isSelected() {
+        return isSelected;
+    }
 
+    @Override
     public void select() {
         isSelected = true;
         view.setBackgroundColor(colorSelected);
@@ -210,6 +201,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         }
     }
 
+    @Override
     public void unSelect() {
         isSelected = false;
         view.setBackgroundColor(colorUnpressed);
@@ -230,7 +222,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
     /*public void setOnClickListener(final MaterialSectionOnClickListener listener) {
         this.sectionListener = listener;
     }*/
-
+    @Override
     public View getView() {
         return view;
     }
@@ -245,22 +237,22 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
     }
 
     public void setIconView(Drawable drawbleicon) {
-        if (this.iconView != null) {
-            this.iconView.setImageDrawable(drawbleicon);
+        if (this.section_left_icon != null) {
+            this.section_left_icon.setImageDrawable(drawbleicon);
             if (fillIconColor)
-                this.iconView.setColorFilter(iconColor);
-            this.iconView.setVisibility(View.VISIBLE);
+                this.section_left_icon.setColorFilter(iconColor);
+            this.section_left_icon.setVisibility(View.VISIBLE);
         }
 
     }
 
     /*public void setIconView(Bitmap drawbleicon) {
-        if (this.iconView != null) {
-            this.iconView.setImageBitmap(drawbleicon);
+        if (this.section_left_icon != null) {
+            this.section_left_icon.setImageBitmap(drawbleicon);
             if (fillIconColor)
-                this.iconView.setColorFilter(iconColor);
+                this.section_left_icon.setColorFilter(iconColor);
 
-            this.iconView.setVisibility(View.VISIBLE);
+            this.section_left_icon.setVisibility(View.VISIBLE);
         }
     }*/
 
@@ -272,8 +264,8 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
 
         sectionColor = color;
         iconColor = color;
-        if (iconView != null)
-            iconView.setColorFilter(sectionColor);
+        if (section_left_icon != null)
+            section_left_icon.setColorFilter(sectionColor);
 
         hasSectionColor = true;
 
@@ -312,15 +304,14 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
 
         if (notifications < 1) {
             textNotification = "";
-        }
-        if (notifications > 99) {
+        } else if (notifications > 99) {
             textNotification = "99+";
+        } else if (notifications == 0) {
+            this.notifications.setVisibility(View.GONE);
         }
 
         this.notifications.setText(textNotification);
         numberNotifications = notifications;
-
-       // return this;
     }
 
     public int getNotifications() {
@@ -329,7 +320,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
 
 
     //public void setBottom(boolean bottom) {
-     //   this.bottom = bottom;
+    //   this.bottom = bottom;
     //}
 
     public boolean isFillIconColor() {
@@ -345,7 +336,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
     }
 
     public ImageView getIconView() {
-        return iconView;
+        return section_left_icon;
     }
 
     public boolean isHasIcon() {
@@ -360,11 +351,11 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
 
             MaterialSectionChangeListener sectionChangeListener = drawer.getSectionChangeListener();
 
-            if(sectionChangeListener != null)
+            if (sectionChangeListener != null)
                 sectionChangeListener.onBeforeChangeSection(this);
             sectionListener.onClick(section, v);
 
-            if(sectionChangeListener != null)
+            if (sectionChangeListener != null)
                 sectionChangeListener.onAfterChangeSection(this);
         }
     }

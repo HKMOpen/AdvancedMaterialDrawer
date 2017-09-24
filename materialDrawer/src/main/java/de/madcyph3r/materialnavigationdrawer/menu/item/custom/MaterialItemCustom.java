@@ -10,8 +10,9 @@ import android.view.View;
 
 import de.madcyph3r.materialnavigationdrawer.R;
 import de.madcyph3r.materialnavigationdrawer.menu.item.MaterialMenuItem;
+import de.madcyph3r.materialnavigationdrawer.listener.Selectable;
 
-public class MaterialItemCustom extends MaterialMenuItem {
+public class MaterialItemCustom extends MaterialMenuItem implements Selectable {
 
     private View view;
 
@@ -31,7 +32,8 @@ public class MaterialItemCustom extends MaterialMenuItem {
         view = LayoutInflater.from(ctx).inflate(getItemLayout(values, res), null);
     }
 
-    private int getItemLayout(TypedArray values, int defaultResId) {
+    @Override
+    protected int getItemLayout(TypedArray values, int defaultResId) {
         int resId = values.getResourceId(R.styleable.MaterialSection_section_item_layout, -1);
         if (resId == -1) {
             Log.d("not", "got -1");
@@ -42,7 +44,23 @@ public class MaterialItemCustom extends MaterialMenuItem {
         }
     }
 
+    @Override
     public View getView() {
         return view;
+    }
+
+    @Override
+    public void select() {
+
+    }
+
+    @Override
+    public void unSelect() {
+
+    }
+
+    @Override
+    public boolean isSelected() {
+        return false;
     }
 }

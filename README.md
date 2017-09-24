@@ -18,6 +18,7 @@ Different Drawer types
 - No header (f.e. screenshot 6)
 - Only Image in header (see example tool)
 - Create your own header style (screenshot 7)
+- Support Custom layout menu item with Easy implementation
 
 Head Item (Account):
 - Unlimited Head-Items (Accounts), tested with 100 Head-Items
@@ -78,7 +79,7 @@ repositories {
 }
 
 dependencies {
-   compile 'com.hkm.ui:advMenu:2.0.5'
+   compile 'com.hkm.ui:advMenu:2.1.0'
 }
 ```
 

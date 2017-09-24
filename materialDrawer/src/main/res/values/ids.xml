@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="amd_layout_touch_area" type="id" />
+    <item name="amd_layout_text" type="id" />
+    <item name="amd_layout_notification" type="id" />
+    <item name="amd_layout_left_icon" type="id" />
+    <item name="amd_layout_right_icon" type="id" />
+    <item name="amd_layout_ripple" type="id" />
+</resources>

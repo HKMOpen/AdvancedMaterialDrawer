@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/section_label"
+        android:id="@id/amd_layout_text"
         android:layout_marginLeft="16dp"
         android:layout_centerVertical="true"
         android:textSize="@dimen/labelSize"

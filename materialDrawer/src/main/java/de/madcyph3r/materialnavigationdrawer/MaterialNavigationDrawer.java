@@ -464,7 +464,7 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
     /**
      * Method used with BACKPATTERN_CUSTOM to retrieve the section which is restored
      *
-     * @param currentSection
+     * @param currentSection allow full customizations
      * @return the Section to restore that has Fragment as target (or currentSectionFragment for exit from activity)
      */
     protected MaterialItemSection backToSection(MaterialItemSection currentSection) {
@@ -965,9 +965,21 @@ public abstract class MaterialNavigationDrawer<Fragment, CustomTextView extends 
                     closeDrawer();
                 }
             } else {
-                currentSectionFragment.select();
+                if (currentSectionFragment.isSelected()) {
+                    currentSectionFragment.select();
+                    if(enable_same_item_click_to_close_drawer_menu){
+                        closeDrawer();
+                    }
+                }
+
             }
         }
+    }
+
+    private boolean enable_same_item_click_to_close_drawer_menu = true;
+
+    protected final void setEnableSameItemClickToCloseDrawer(boolean b) {
+        enable_same_item_click_to_close_drawer_menu = b;
     }
 
     // getter and setter

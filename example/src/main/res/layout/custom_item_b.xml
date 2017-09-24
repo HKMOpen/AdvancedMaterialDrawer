@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@id/amd_layout_touch_area"
     android:layout_width="match_parent"
     android:layout_height="48dp"
+    android:background="@color/cyan_800"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
     tools:targetApi="honeycomb">
+
+    <ImageView
+        android:id="@id/amd_layout_left_icon"
+        android:layout_width="@dimen/sectionIconWidth"
+        android:layout_height="@dimen/sectionIconHeight"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp" />
 
     <TextView
         android:id="@id/amd_layout_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="72dp"
         android:layout_marginRight="8dp"
         android:layout_toLeftOf="@id/amd_layout_notification"
         android:layout_toStartOf="@id/amd_layout_notification"
+        android:text="XXXX XXX "
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sectionSize" />
+        android:textColor="@color/dividerMyColor"
+        android:textSize="32sp" />
 
     <TextView
         android:id="@id/amd_layout_notification"
@@ -37,6 +49,5 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/sectionNotificationSize"
         android:textStyle="bold" />
-
 
 </RelativeLayout>
