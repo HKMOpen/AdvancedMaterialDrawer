@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@id/amd_layout_touch_area"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:baselineAligned="false">
+
+    <ImageView
+        android:id="@id/amd_layout_left_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="48dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_bookmark_black_24dp" />
+
+    <TextView
+        android:id="@id/amd_layout_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/amd_layout_right_icon"
+        android:layout_toRightOf="@id/amd_layout_left_icon"
+        android:gravity="center|left"
+        android:paddingLeft="7dp"
+        tool:text="中文" />
+
+    <ImageView
+        android:id="@id/amd_layout_right_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_documents"
+       />
+
+    <TextView
+        android:id="@id/amd_layout_notification"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:scaleType="centerInside"
+        android:visibility="gone" />
+
+</RelativeLayout>

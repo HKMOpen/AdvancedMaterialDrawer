@@ -5,7 +5,9 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -59,6 +61,20 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         return -1;
     }
 
+
+    protected void applyIconL(ImageView RightIconView, boolean has, Drawable icon) {
+
+    }
+
+
+    protected void applyIconR(ImageView RightIconView, boolean has, Drawable icon) {
+
+    }
+
+    protected Drawable getCustomRightIcon() {
+        return null;
+    }
+
     @SuppressLint("WrongViewCast")
     protected void init(MaterialNavigationDrawer drawer, Drawable iconDrawable /*resIconID/*, boolean hasIcon, MaterialSectionChangeListener sectionChangeListener*/, boolean fullWidthIcon) {
         this.drawer = drawer;
@@ -110,7 +126,6 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
             e.printStackTrace();
         }
 
-
         try {
             notifications = (CustomTextView) view.findViewById(R.id.amd_layout_notification);
         } catch (Exception e) {
@@ -120,6 +135,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
 
         try {
             section_left_icon = (ImageView) view.findViewById(R.id.amd_layout_left_icon);
+            applyIconL(section_left_icon, hasIcon, iconDrawable);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,6 +143,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
 
         try {
             section_right_icon = (ImageView) view.findViewById(R.id.amd_layout_right_icon);
+            applyIconR(section_right_icon, getCustomRightIcon() != null, getCustomRightIcon());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,7 +228,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         }
     }
 
-    /*public void setPosition(int position) {
+  /*  public void setPosition(int position) {
         this.position = position;
     }
 
@@ -222,6 +239,8 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
     /*public void setOnClickListener(final MaterialSectionOnClickListener listener) {
         this.sectionListener = listener;
     }*/
+
+
     @Override
     public View getView() {
         return view;
@@ -236,6 +255,7 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         this.text.setText(title);
     }
 
+    @Deprecated
     public void setIconView(Drawable drawbleicon) {
         if (this.section_left_icon != null) {
             this.section_left_icon.setImageDrawable(drawbleicon);
@@ -243,8 +263,33 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
                 this.section_left_icon.setColorFilter(iconColor);
             this.section_left_icon.setVisibility(View.VISIBLE);
         }
-
     }
+
+
+    public void applyCustomIcon(@Nullable Drawable L, @Nullable Drawable R) {
+        if (this.section_left_icon != null) {
+            if (R != null) {
+                this.section_left_icon.setImageDrawable(L);
+                if (fillIconColor)
+                    this.section_left_icon.setColorFilter(iconColor);
+                this.section_left_icon.setVisibility(View.VISIBLE);
+            } else {
+                this.section_left_icon.setVisibility(View.GONE);
+            }
+        }
+
+        if (this.section_right_icon != null) {
+            if (R != null) {
+                this.section_right_icon.setImageDrawable(R);
+                if (fillIconColor)
+                    this.section_right_icon.setColorFilter(iconColor);
+                this.section_right_icon.setVisibility(View.VISIBLE);
+            } else {
+                this.section_right_icon.setVisibility(View.GONE);
+            }
+        }
+    }
+
 
     /*public void setIconView(Bitmap drawbleicon) {
         if (this.section_left_icon != null) {

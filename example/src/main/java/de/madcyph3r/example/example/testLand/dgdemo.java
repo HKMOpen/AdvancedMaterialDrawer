@@ -3,12 +3,14 @@ package de.madcyph3r.example.example.testLand;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
 import de.madcyph3r.example.R;
 import de.madcyph3r.example.example.FragmentDummy;
 import de.madcyph3r.example.example.FragmentInstruction;
+import de.madcyph3r.example.example.widgets.ItemFr;
 import de.madcyph3r.materialnavigationdrawer.MaterialNavigationDrawer;
 import de.madcyph3r.materialnavigationdrawer.activity.MaterialNavHeadItemActivity;
 import de.madcyph3r.materialnavigationdrawer.activity.MaterialNavNoHeaderActivity;
@@ -81,8 +83,8 @@ public class dgdemo extends MaterialNavNoHeaderActivity {
             }
         });
         menu.add(section);
-        menu.add(new MaterialItemSectionFragment(this, "Membership 1", new FragmentDummy(), "Section 1"));
-        menu.add(new MaterialItemSectionFragment(this, "Membership 2", new FragmentDummy(), "Section 2"));
+        menu.add(new ItemFr(this, "Membership 1", ContextCompat.getDrawable(this, R.drawable.ic_list_black_36dp), new FragmentDummy(), "Section 1"));
+        menu.add(new ItemFr(this, "Membership 2", new FragmentDummy(), "Section 2"));
         menu.add(new MaterialItemSectionFragment(this, "Membership 3", new FragmentDummy(), "Section 3"));
         loadMenu(menu);
     }
