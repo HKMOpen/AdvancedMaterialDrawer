@@ -3,9 +3,9 @@ package de.madcyph3r.example;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
-public class DummyActivity extends ActionBarActivity {
+public class DummyActivity extends AppCompatActivity {
 
     private Context ctx;
 

@@ -34,10 +34,10 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile supportDependencies.appCompat
-    compile 'com.github.JingkaiTang:TextDrawable:1.1.1'
-    compile project(':materialDrawer')
-    compile 'com.github.kanytu:android-parallax-recyclerview:v1.2'
-    compile 'com.hkm.ui:advancedtoolbar:1.1.10'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation supportDependencies.appCompat
+    implementation 'com.github.JingkaiTang:TextDrawable:1.1.1'
+    implementation project(':materialDrawer')
+    implementation 'com.github.kanytu:android-parallax-recyclerview:v1.2'
+    implementation 'com.hkm.ui:advancedtoolbar:1.2.0'
 }
