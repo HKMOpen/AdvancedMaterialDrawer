@@ -79,7 +79,7 @@ repositories {
 }
 
 dependencies {
-   compile 'com.hkm.ui:advMenu:2.1.0'
+   compile 'com.hkm.ui:advMenu:2.3.0'
 }
 ```
 
