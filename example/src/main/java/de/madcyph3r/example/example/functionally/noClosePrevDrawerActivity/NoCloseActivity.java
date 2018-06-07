@@ -3,11 +3,11 @@ package de.madcyph3r.example.example.functionally.noClosePrevDrawerActivity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import de.madcyph3r.example.R;
 
-public class NoCloseActivity extends ActionBarActivity {
+public class NoCloseActivity extends AppCompatActivity {
 
     private Context ctx;
 

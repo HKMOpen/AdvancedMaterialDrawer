@@ -6,24 +6,21 @@ android {
     compileSdkVersion project.ANDROID_BUILD_SDK_VERSION as int
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion 17
         targetSdkVersion project.ANDROID_BUILD_TARGET_SDK_VERSION as int
         versionCode 17
         versionName "2.0.0"
     }
     buildTypes {
         release {
-
         }
-    }
-    productFlavors {
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile supportDependencies.appCompat
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation supportDependencies.appCompat
 }
 
-apply from: 'br.gradle'
+apply from: "br.gradle"

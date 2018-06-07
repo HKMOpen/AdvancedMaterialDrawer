@@ -49,7 +49,7 @@ public class MainActivity extends MaterialNavNoHeaderActivity {
         menu.add(new MaterialItemLabel(this, "Examples"));
 
         Intent intent = new Intent(this, dgdemo.class);
-        menu.add(new CustomMeAC(this, "dg demo", intent));
+        menu.add(new CustomMeAC(this, "Some Menu", intent));
         menu.add(new MaterialItemSectionFragment(this, "Theme", new ThemeFragment(), "Theme").setSectionColor(Color.parseColor("#ff0000")));
         menu.add(new MaterialItemSectionFragment(this, "Drawer Types", new DrawerTypesFragment(), "Drawer Types").setSectionColor(Color.parseColor("#D35400")));
         menu.add(new MaterialItemSectionFragment(this, "Header Types", new HeaderTypesFragment(), "Header Types").setSectionColor(Color.parseColor("#01AEA1")));

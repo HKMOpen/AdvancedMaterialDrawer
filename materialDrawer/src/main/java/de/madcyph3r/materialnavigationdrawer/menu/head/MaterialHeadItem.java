@@ -218,10 +218,9 @@ public class MaterialHeadItem {
         this.menu = menu;
     }
 
-    /*  public void setStartIndex(int startIndex) {
+    /*public void setStartIndex(int startIndex) {
           this.startIndex = startIndex;
-      }
-  */
+      }*/
     public void setLoadFragmentOnChanged(boolean loadFragmentOnChanged) {
         this.loadFragmentOnChanged = loadFragmentOnChanged;
     }
