@@ -150,8 +150,8 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
 
         // hide text on icon banner
         if (hasIcon && fullWidthIcon) {
-            text.setVisibility(View.GONE);
-            notifications.setVisibility(View.GONE);
+            if (text != null) text.setVisibility(View.GONE);
+            if (notifications != null) notifications.setVisibility(View.GONE);
         }
 
         int rippleColor = values.getColor(R.styleable.MaterialSection_sectionRippleColor, 0x16000000);
@@ -189,11 +189,11 @@ public abstract class MaterialItemSection<CustomTextView extends TextView> exten
         sectionDivided = values.getBoolean(R.styleable.MaterialSection_sectionDivider, false);
 
         // set text color into the view
-        if (textColor != 0x000) {
+        if (text != null && textColor != 0x000) {
             text.setTextColor(textColor);
         }
 
-        if (notificationColor != 0x000) {
+        if (notifications != null && notificationColor != 0x000) {
             notifications.setTextColor(notificationColor);
         }
 
